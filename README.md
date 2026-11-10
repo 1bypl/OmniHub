@@ -1,6 +1,6 @@
 # OmniHub — wersja po audycie
 
-Ta paczka zawiera wyłącznie aplikację webową i jej pliki źródłowe. **Nie zawiera instalatorów DEB, RPM, EXE, APK ani konfiguracji budowania instalatorów.**
+Narzędzie zawiera aplikację webową i możliwość uruchomienia lokalnie przez przeglądarkę z pliku startowego index.html. Posiada możliwość zmiany plików źródłowych i pełnego zarządzania treścią. **Nie zawiera instalatorów DEB, RPM, EXE, APK ani konfiguracji budowania instalatorów. Działa na każdym systeme operacyjnym i urządzeniu. Obsługuje wiele języków: PL, EN, DE, ES, IT, RU, FR**
 
 ## Uruchamianie lokalne
 
