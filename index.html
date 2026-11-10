@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OmniHub – Centralny Portal Zasobów</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="alternate icon" href="favicon.ico">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#38bdf8">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="header">
+    <select id="langSelect" class="theme-select lang-select" title="Language / Język">
+        <option value="pl">🇵🇱 PL</option>
+        <option value="en">🇬🇧 EN</option>
+        <option value="it">🇮🇹 IT</option>
+        <option value="es">🇪🇸 ES</option>
+        <option value="de">🇩🇪 DE</option>
+        <option value="fr">🇫🇷 FR</option>
+        <option value="ru">🇷🇺 RU</option>
+    </select>
+    <div class="logo" id="logoBtn">🚀 OmniHub</div>
+    <div class="search-box">
+        <input type="text" id="searchInput" autocomplete="off">
+        <kbd>/</kbd>
+    </div>
+    <div class="header-actions">
+        <select id="themeSelect" class="theme-select" data-i18n-title="theme.title">
+            <option value="auto">🌓 Auto</option>
+            <option value="dark">🌙</option>
+            <option value="light">☀️</option>
+            <option value="midnight">🌌</option>
+            <option value="emerald">🌲</option>
+            <option value="sunset">🌅</option>
+        </select>
+        <button id="profileBtn" class="btn-secondary btn-icon" data-i18n-title="profile.title">👤</button>
+        <button id="presentationBtn" class="btn-secondary btn-icon" data-i18n-title="presentation.title">🎭</button>
+        <button id="statsBtn" class="btn-secondary btn-icon" data-i18n-title="stats.title">📊</button>
+        <button id="openModalBtn" class="btn-primary" data-i18n="btn.add">+ Dodaj</button>
+    </div>
+</header>
+
+<main class="main-content">
+    <aside class="sidebar" id="sidebar">
+        <h2 data-i18n="sidebar.categories">Kategorie</h2>
+        <nav><ul id="categoryNav"></ul></nav>
+        <button id="addCategoryBtn" class="btn-secondary" style="margin-top:.5rem;" data-i18n="sidebar.addCategory">+ Nowa kategoria</button>
+        <div class="backup-section">
+            <h3 data-i18n="sidebar.data">Dane</h3>
+            <button id="linkManagerBtn" class="btn-secondary" style="background:var(--accent);color:#0f172a;font-weight:bold;">🔗 <span data-i18n="sidebar.linkManager">Menedżer linków</span></button>
+            <button id="exportBtn" class="btn-secondary" data-i18n="btn.exportJson">📥 Eksport JSON</button>
+            <label for="importFile" class="btn-secondary import-label" data-i18n="btn.importJson">📤 Import JSON</label>
+            <input type="file" id="importFile" accept=".json" hidden>
+            <label for="importDataJson" class="btn-secondary import-label" data-i18n="btn.importDataJson">📦 Import data.json</label>
+            <input type="file" id="importDataJson" accept=".json" hidden>
+            <button id="exportHtmlBtn" class="btn-secondary" data-i18n="btn.exportHtml">📄 Eksport HTML</button>
+            <button id="exportCsvBtn" class="btn-secondary" data-i18n="btn.exportCsv">📊 Eksport CSV</button>
+            <label for="importCsv" class="btn-secondary import-label" data-i18n="btn.importCsv">📊 Import CSV</label>
+            <input type="file" id="importCsv" accept=".csv" hidden>
+            <label for="importBookmarks" class="btn-secondary import-label" data-i18n="btn.importBookmarks">🔖 Import zakładek</label>
+            <input type="file" id="importBookmarks" accept=".html,.htm" hidden>
+            <button id="syncFileBtn" class="btn-secondary" data-i18n="btn.syncFile">🔄 Auto-odśwież data.json</button>
+            <button id="trashBtn" class="btn-secondary"><span data-i18n="btn.trash">🗑️ Kosz</span> (<span id="trashCount">0</span>)</button>
+            <button id="themeCustomBtn" class="btn-secondary" data-i18n="btn.customTheme">🎨 Motyw niestandardowy</button>
+            <button id="shareUrlBtn" class="btn-secondary" data-i18n="btn.shareUrl">🔗 Udostępnij link</button>
+            <button id="resetAppBtn" class="btn-secondary" style="color:#f87171;">⚠️ Reset aplikacji</button>
+            <p class="sync-info" data-i18n="sidebar.info">💡 Dane w tej przeglądarce.</p>
+        </div>
+    </aside>
+    <section class="content-area">
+        <div class="content-header" id="contentHeader">
+            <div class="content-title-block">
+                <h1 id="categoryTitle">Agenci AI</h1>
+                <p id="categoryDesc"></p>
+            </div>
+            <div class="sort-controls" id="sortControls">
+                <button id="clearFilterBtn" class="btn-secondary" style="display:none;" data-i18n="btn.clearFilter">✕</button>
+                <select id="ratingFilterSelect" class="theme-select">
+                    <option value="0" data-i18n="rating.all">Wszystkie oceny</option>
+                    <option value="4">≥4★</option>
+                    <option value="3">≥3★</option>
+                    <option value="2">≥2★</option>
+                    <option value="1" data-i18n="rating.hasRating">Z oceną</option>
+                </select>
+                <select id="sourceFilterSelect" class="theme-select" title="Filtruj według rodzaju źródła">
+                    <option value="">Wszystkie źródła</option>
+                    <option value="open-source">Open Source</option>
+                    <option value="open-access">Open Access</option>
+                    <option value="free">Darmowe</option>
+                    <option value="github">Repozytoria GitHub</option>
+                </select>
+                <select id="viewModeSelect" class="theme-select">
+                    <option value="cards" data-i18n="view.cards">Karty</option>
+                    <option value="list" data-i18n="view.list">Lista</option>
+                    <option value="calendar" data-i18n="view.calendar">Kalendarz</option>
+                </select>
+                <label for="sortSelect" data-i18n="sort.label">Sortuj:</label>
+                <select id="sortSelect" class="theme-select">
+                    <option value="default" data-i18n="sort.default">Domyślnie</option>
+                    <option value="rating-desc" data-i18n="sort.ratingDesc">Najwyżej oceniane</option>
+                    <option value="rating-asc" data-i18n="sort.ratingAsc">Najniżej oceniane</option>
+                    <option value="comments-desc" data-i18n="sort.commentsDesc">Najwięcej komentarzy</option>
+                    <option value="newest" data-i18n="sort.newest">Najnowsze</option>
+                    <option value="oldest" data-i18n="sort.oldest">Najstarsze</option>
+                    <option value="recent" data-i18n="sort.recent">Ostatnio odwiedzane</option>
+                    <option value="frequent" data-i18n="sort.frequent">Często odwiedzane</option>
+                    <option value="title-asc" data-i18n="sort.titleAsc">Nazwa A-Z</option>
+                    <option value="title-desc" data-i18n="sort.titleDesc">Nazwa Z-A</option>
+                    <option value="badge-asc" data-i18n="sort.badgeAsc">Etykieta A-Z</option>
+                    <option value="open-source">Open Source na początku</option>
+                </select>
+            </div>
+        </div>
+        <div id="tagChips" class="tag-chips"></div>
+        <div id="linkManagerPanel" style="display:none;"></div>
+        <div id="cardsContainer" class="cards-grid"></div>
+    </section>
+</main>
+
+<div id="toast" class="toast hidden"><span id="toastMessage"></span><button id="toastUndoBtn" class="toast-undo" data-i18n="btn.undo">Cofnij</button></div>
+
+<div id="detailModal" class="modal">
+    <div class="modal-content modal-wide detail-modal">
+        <span id="closeDetailModal" class="close">&times;</span>
+        <div id="detailContent"></div>
+    </div>
+</div>
+
+<div id="playerModal" class="modal player-modal">
+    <div class="modal-content modal-wide">
+        <span id="closePlayerModal" class="close">&times;</span>
+        <div class="player-header">
+            <h2 id="playerTitle"></h2>
+            <div class="player-skin-picker">
+                <label data-i18n="player.skin">Skórka:</label>
+                <button class="skin-btn active" data-skin="compact" title="Compact">▭</button>
+                <button class="skin-btn" data-skin="cinema" title="Cinema">▬</button>
+                <button class="skin-btn" data-skin="theater" title="Theater">⬛</button>
+            </div>
+        </div>
+        <div id="playerContainer"></div>
+        <div class="player-local-file">
+            <label class="btn-secondary" for="localMediaFile">📂 Otwórz plik z komputera</label>
+            <input type="file" id="localMediaFile" accept="video/*,audio/*" hidden>
+            <span class="player-status" id="localMediaStatus" role="status"></span>
+        </div>
+        <div id="playerInfo" class="player-info"></div>
+    </div>
+</div>
+
+<div id="photoModal" class="modal photo-modal">
+    <span id="closePhotoModal" class="close photo-close">&times;</span>
+    <div class="photo-toolbar">
+        <span id="photoCounter"></span>
+        <span id="photoFormat" class="photo-format-badge"></span>
+        <button id="photoDownloadBtn">⬇</button>
+        <button id="photoExternalBtn">↗</button>
+        <button id="photoZoomOut">−</button>
+        <button id="photoZoomIn">+</button>
+        <button id="photoZoomReset">⟲</button>
+    </div>
+    <div class="photo-viewport" id="photoViewport">
+        <img id="photoImage" draggable="false">
+    </div>
+    <button id="photoPrev" class="photo-nav photo-prev">‹</button>
+    <button id="photoNext" class="photo-nav photo-next">›</button>
+</div>
+
+<div id="resourceModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModalBtn" class="close">&times;</span>
+        <h2 id="modalTitle" data-i18n="modal.addTitle">Dodaj zasób</h2>
+        <form id="addResourceForm">
+            <input type="hidden" id="editIndex"><input type="hidden" id="editOriginalCategory"><input type="hidden" id="editOriginalUrl">
+            <div class="form-group"><label for="resTitle" data-i18n="form.name">Nazwa:</label><input type="text" id="resTitle" required></div>
+            <div class="form-group"><label for="resCategory" data-i18n="form.category">Kategoria:</label><select id="resCategory"></select></div>
+            <div class="form-group"><label for="resBadge" data-i18n="form.badge">Etykieta:</label><input type="text" id="resBadge"></div>
+            <div class="form-group"><label for="resTags" data-i18n="form.tags">Tagi:</label><input type="text" id="resTags"></div>
+            <div class="form-group"><label for="resUrl" data-i18n="form.url">URL:</label><input type="url" id="resUrl" required></div>
+            <div id="mediaPreview" class="media-preview"></div>
+            <div class="form-group"><label for="resThumbnail" data-i18n="form.thumbnail">Miniatura:</label>
+                <div style="display:flex; gap:.5rem;">
+                    <input type="url" id="resThumbnail">
+                    <button type="button" id="fetchPreviewBtn" class="btn-secondary" style="width:auto; margin:0;" data-i18n="btn.auto">Auto</button>
+                </div>
+            </div>
+            <div class="form-group"><label for="resDesc" data-i18n="form.description">Opis:</label><textarea id="resDesc" rows="3" required></textarea></div>
+            <div class="form-group"><label for="resNotes" data-i18n="form.notes">Notatki:</label><textarea id="resNotes" rows="2"></textarea></div>
+            <div class="form-group" style="display:flex; align-items:center; gap:.5rem;">
+                <input type="checkbox" id="resPrivate" style="width:auto;">
+                <label for="resPrivate" style="margin:0;" data-i18n="form.private">🔒 Prywatny</label>
+            </div>
+            <button type="submit" id="submitBtn" class="btn" data-i18n="btn.save">Zapisz</button>
+        </form>
+    </div>
+</div>
+
+<div id="categoryModal" class="modal">
+    <div class="modal-content">
+        <span id="closeCategoryModal" class="close">&times;</span>
+        <h2 data-i18n="catModal.title">Nowa kategoria</h2>
+        <form id="addCategoryForm">
+            <div class="form-group"><label for="catTitle" data-i18n="form.name">Nazwa:</label><input type="text" id="catTitle" required></div>
+            <div class="form-group"><label for="catIcon" data-i18n="form.icon">Ikona:</label><input type="text" id="catIcon" maxlength="4" placeholder="🎮"></div>
+            <div class="form-group"><label for="catColor" data-i18n="form.color">Kolor:</label><input type="color" id="catColor" value="#38bdf8"></div>
+            <button type="submit" class="btn" data-i18n="btn.create">Utwórz</button>
+        </form>
+    </div>
+</div>
+
+<div id="statsModal" class="modal">
+    <div class="modal-content modal-wide">
+        <span id="closeStatsModal" class="close">&times;</span>
+        <h2 data-i18n="stats.title">📊 Statystyki</h2>
+        <div id="statsContent"></div>
+    </div>
+</div>
+
+<div id="trashModal" class="modal">
+    <div class="modal-content modal-wide">
+        <span id="closeTrashModal" class="close">&times;</span>
+        <h2 data-i18n="trash.title">🗑️ Kosz</h2>
+        <div id="trashContent"></div>
+    </div>
+</div>
+
+<div id="themeModal" class="modal">
+    <div class="modal-content">
+        <span id="closeThemeModal" class="close">&times;</span>
+        <h2 data-i18n="themeModal.title">🎨 Motyw</h2>
+        <div class="theme-color-row"><label data-i18n="themeModal.bgMain">Tło:</label><input type="color" id="thBgMain"></div>
+        <div class="theme-color-row"><label data-i18n="themeModal.bgHeader">Nagłówek:</label><input type="color" id="thBgHeader"></div>
+        <div class="theme-color-row"><label data-i18n="themeModal.bgCard">Karta:</label><input type="color" id="thBgCard"></div>
+        <div class="theme-color-row"><label data-i18n="themeModal.border">Obramowanie:</label><input type="color" id="thBorder"></div>
+        <div class="theme-color-row"><label data-i18n="themeModal.text">Tekst:</label><input type="color" id="thText"></div>
+        <div class="theme-color-row"><label data-i18n="themeModal.accent">Akcent:</label><input type="color" id="thAccent"></div>
+        <button id="saveThemeBtn" class="btn" data-i18n="btn.save">Zapisz</button>
+        <button id="resetThemeBtn" class="btn-secondary" data-i18n="btn.reset">Resetuj</button>
+    </div>
+</div>
+
+<div id="historyModal" class="modal">
+    <div class="modal-content">
+        <span id="closeHistoryModal" class="close">&times;</span>
+        <h2 data-i18n="history.title">📜 Historia</h2>
+        <div id="historyContent"></div>
+    </div>
+</div>
+
+<div id="profileModal" class="modal">
+    <div class="modal-content">
+        <span id="closeProfileModal" class="close">&times;</span>
+        <h2 data-i18n="profile.title">👤 Profil</h2>
+        <div class="form-group"><label for="profileName" data-i18n="profile.name">Twoje imię:</label><input type="text" id="profileName" maxlength="50"></div>
+        <button id="saveProfileBtn" class="btn" data-i18n="btn.save">Zapisz</button>
+    </div>
+</div>
+
+<div id="helpModal" class="modal">
+    <div class="modal-content">
+        <span id="closeHelpModal" class="close">&times;</span>
+        <h2 data-i18n="help.title">❓ Pomoc</h2>
+        <div id="helpContent"></div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 OmniHub · <button id="helpBtn" class="link-btn" data-i18n="btn.help">Pomoc</button></p>
+</footer>
+<script src="data-seed.js"></script>
+<script src="games-catalog.js"></script>
+<script src="social-catalog.js"></script>
+<script src="app.js"></script></script>
+</body>
+</html>

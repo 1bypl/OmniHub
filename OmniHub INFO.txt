@@ -1,0 +1,164 @@
+═══════════════════════════════════════════════════════════
+OmniHub — punkt przywracania po sesji 2026-11-08
+═══════════════════════════════════════════════════════════
+
+LOKALIZACJA PROJEKTU
+  /home/user/OmniHub_Project/src/
+
+PLIKI (6)
+  index.html
+  style.css
+  app.js
+  data.json
+  manifest.json
+  service-worker.js
+  (favicon: inline data URI w <head>)
+
+URUCHOMIENIE
+  cd /home/user/OmniHub_Project/src/
+  python3 -m http.server 8080
+  → przeglądarka: http://127.0.0.1:8080/
+  Uruchomienie lokalne w komputerze - /home/user/OmniHub_Project/src/index.html
+
+═══════════════════════════════════════════════════════════
+STAN: STABILNY — wszystkie funkcje działają, konsola czysta
+═══════════════════════════════════════════════════════════
+
+WERSJE
+  SCHEMA_VERSION: 10
+  Service Worker cache: omnihub-v10
+
+KATEGORIE (15, wbudowane)
+  ai, software, multimedia, knowledge, tools, drivers,
+  programming, games, linux, promotions, sell, buy, social,
+  wallpapers, films
+  + "Wszystkie" (agregat) + "Ulubione" + kategorie użytkownika
+
+JĘZYKI INTERFEJSU (7)
+  PL, EN, IT, ES, DE, FR, RU
+  - nazwy kategorii: statyczne (CATEGORY_I18N)
+  - opisy wpisów: tłumaczone on-demand przez MyMemory API
+    z cache w localStorage (omnihub_translations)
+
+═══════════════════════════════════════════════════════════
+FUNKCJE — zweryfikowane jako działające
+═══════════════════════════════════════════════════════════
+
+DANE I CRUD
+  ✓ Dodawanie / edycja / usuwanie wpisów
+  ✓ Walidacja URL (duplikat = blokada, domena = ostrzeżenie)
+  ✓ Override wpisów statycznych (edycja data.json lokalnie)
+  ✓ Kategorie użytkownika
+  ✓ Ulubione z folderami
+  ✓ Tagi (wiele per wpis)
+  ✓ Oceny (suma, głosy, rozkład, historia)
+  ✓ Komentarze (wątki, reakcje 👍👎, resolved)
+  ✓ Notatki prywatne
+  ✓ Wpisy prywatne (ukryte w "Wszystkie" i wyszukiwaniu)
+
+WIDOKI
+  ✓ Karty / Lista / Kalendarz
+  ✓ Sortowanie (11 opcji w tym po ocenie, komentarzach, dacie)
+  ✓ Filtr oceny (≥4★, ≥3★ itd.)
+  ✓ Paginacja z elipsą
+  ✓ Drag & drop (kolejność własna)
+  ✓ Tryb prezentacji (P)
+  ✓ Menedżer linków (osobny widok, skan aktywnych/nieaktywnych)
+
+MEDIA
+  ✓ Auto-detekcja: YouTube, Vimeo, Dailymotion, Twitch,
+    Streamable, Odysee, SoundCloud, Mixcloud + direct URL
+  ✓ Player: 3 skórki (Kompakt, Kino, Teatr)
+  ✓ Auto-resume wideo (pozycja co 5s)
+  ✓ Lightbox zdjęć z zoomem/panem
+  ✓ Miniatury YouTube automatyczne
+
+NARZĘDZIA
+  ✓ Wyszukiwanie zaawansowane (badge:, tag:, cat:, is:fav, title:)
+  ✓ Eksport: JSON (pełny backup), HTML, CSV
+  ✓ Import: JSON, data.json, CSV, zakładki przeglądarki
+  ✓ Auto-odświeżanie data.json (polling 10s)
+  ✓ Skaner linków z cache 24h
+  ✓ Historia zmian per wpis
+  ✓ Kosz 30 dni z przywracaniem
+  ✓ Undo/Redo (20 poziomów, Ctrl+Z / Ctrl+Shift+Z)
+  ✓ 5 motywów + motyw niestandardowy (color picker)
+  ✓ Profil użytkownika
+  ✓ Share link (kodowanie konfiguracji w #cfg=)
+  ✓ Reset aplikacji (pełne czyszczenie localStorage)
+
+SKRÓTY KLAWIATUROWE
+  /         fokus wyszukiwarki
+  Shift+?   pomoc
+  F1        pomoc
+  1-9       nawigacja po kategoriach
+  N         nowy wpis
+  Shift+N   nowy w bieżącej kategorii
+  F         ulubione
+  P         tryb prezentacji
+  R         oceń pierwszą kartę
+  Ctrl+Z    cofnij
+  Ctrl+Shift+Z  ponów
+  Esc       zamknij modal / wyczyść filtr
+
+PWA
+  ✓ Service worker (cache offline)
+  ✓ Manifest
+  ✓ Favicon SVG
+
+═══════════════════════════════════════════════════════════
+KLUCZE localStorage (prefix: omnihub_)
+═══════════════════════════════════════════════════════════
+  omnihub_favorites          ulubione
+  omnihub_custom_data        wpisy użytkownika + override
+  omnihub_custom_categories  kategorie użytkownika
+  omnihub_custom_tags        tagi
+  omnihub_view_counts        liczniki odwiedzin
+  omnihub_order              ręczna kolejność (drag&drop)
+  omnihub_trash              kosz
+  omnihub_ratings            oceny
+  omnihub_comments           komentarze
+  omnihub_hidden_statics     ukryte wpisy statyczne
+  omnihub_profile            profil
+  omnihub_link_cache         cache skanera linków
+  omnihub_translations       cache tłumaczeń
+  omnihub_theme              motyw
+  omnihub_custom_theme       motyw własny
+  omnihub_lang               język
+  omnihub_sort               sortowanie
+  omnihub_view_mode          widok (cards/list/calendar)
+  omnihub_player_skin        skórka playera
+  omnihub_media_progress     pozycja odtwarzania
+
+═══════════════════════════════════════════════════════════
+NAPRAWIONE BŁĘDY (ta sesja)
+═══════════════════════════════════════════════════════════
+  1. ReferenceError: exportPdfBtn is not defined
+     → zamienione na bezpieczne IIFE z getElementById
+     → skutek: ~80% funkcji było martwych, teraz wszystkie OK
+  2. Nieskończona pętla render przy zmianie języka
+     → getItemDesc() czysta funkcja + backgroundTranslate()
+  3. Utrata wpisów statycznych przy błędzie data.json
+     → allData nie czyszczone, komunikat w konsoli
+  4. Duplikaty wpisów między kategoriami
+     → czyszczenie + deduplikacja w getAllItems()
+
+═══════════════════════════════════════════════════════════
+DO ZROBIENIA NA PRZYSZŁOŚĆ (nie zrealizowane)
+═══════════════════════════════════════════════════════════
+  - Bulk edit (masowa zmiana kategorii/tagów)
+  - Eksport do PDF (przycisk usunięty z HTML, kod bezpieczny)
+  - Ranking użytkowników / tygodnia
+  - Historie wielopoziomowe komentarzy (obecnie 1 piętro)
+  - Synchronizacja przez serwer (obecnie tylko backup plik)
+  - Wdrożenie online (GitHub Pages / Netlify / Cloudflare)
+
+═══════════════════════════════════════════════════════════
+UWAGI EKSPLOATACYJNE ROZUBOWY APLIKACJI
+═══════════════════════════════════════════════════════════
+  • Zanim zaczniesz testować nową iterację — zrób EKSPORT JSON
+  • Po każdej edycji pliku: Ctrl+Shift+R w przeglądarce
+  • Problemy diagnozuj w F12 → Konsola (nie Debugger)
+  • Tłumaczenia API mają limit ~1000 zapytań/dzień (MyMemory)
+  • Cache service workera wersjonuj przy każdej zmianie
+═══════════════════════════════════════════════════════════
