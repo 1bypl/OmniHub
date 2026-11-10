@@ -46,3 +46,4 @@ Jeśli zmienisz dane startowe w `data.json`, zaktualizuj również `data-seed.js
 ## Zakres sprawdzenia
 
 W audycie wykonano statyczną kontrolę składni JavaScript, poprawności JSON, odwołań do zasobów HTML, duplikatów identyfikatorów i podstawowych przypadków renderowania Markdown. Nie wykonano pełnego testu odtwarzania na każdym kodeku, urządzeniu i strumieniu — to wymaga rzeczywistych plików testowych i środowiska przeglądarki.
+Skan z Virustotal: https://www.virustotal.com/gui/file/ecb4df5822d0824eb25a83a482636c01e899145e0de69ce4ead42100247001b2
