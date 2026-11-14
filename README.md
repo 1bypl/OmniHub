@@ -21,6 +21,8 @@ live-server
 ```
 Następnie otwórz adres wyświetlony przez Live Server. Nie uruchamiaj `live-server` z katalogu domowego (`/home/daka`), bo wtedy serwer udostępnia katalog domowy, a nie katalog OmniHub. Jeśli strona jest otwarta pod `/`, żądania `/data.json` i `/service-worker.js` będą szukały plików w złym miejscu.
 
+Pobierz OmniHub w wersji 1.2.0 (https://drive.proton.me/urls/0B16F9XJTM#c4unaoTwwu1Y)
+
 ## Multimedia
 
 - Odtwarzanie bezpośrednich plików audio/wideo przez natywny element HTML5.
