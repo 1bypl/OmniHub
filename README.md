@@ -23,6 +23,8 @@ Następnie otwórz adres wyświetlony przez Live Server. Nie uruchamiaj `live-se
 
 Pobierz OmniHub w wersji 1.2.0 (https://drive.proton.me/urls/0B16F9XJTM#c4unaoTwwu1Y)
 
+Pobierz instalator dla Windows OmniHub 1.2.0.exe (https://drive.proton.me/urls/04NK7Q02VR#BjeQjqeaEvu5)
+
 ## Multimedia
 
 - Odtwarzanie bezpośrednich plików audio/wideo przez natywny element HTML5.
